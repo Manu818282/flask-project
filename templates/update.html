@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block body %}
+      <div class="container my-5">
+        <form action="/update/{{found[0]}}" method="post">
+            <div class="mb-3">
+              <label for="title" class="form-label">Todo Title</label>
+              <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp" value="{{found[1]}}">
+
+            <div class="mb-3">
+              <label for="Description" class="form-label">Todo Description</label>
+              <input type="text" class="form-control" id="Description" name="desc" value="{{found[2]}}">
+            </div>
+
+            <button type="submit" class="btn btn-dark">Update</button>
+            </div>
+          </form>
+      </div>
+{% endblock body %}
