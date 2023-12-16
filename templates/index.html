@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block body %}
+      <div class="container my-5">
+        <form action="/home" method="post">
+            <div class="mb-3">
+              <label for="title" class="form-label">Todo Title</label>
+              <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp">
+              
+            <div class="mb-3">
+              <label for="Description" class="form-label">Todo Description</label>
+              <input type="text" class="form-control" id="Description" name="desc">
+            </div>
+
+            <button type="submit" class="btn btn-dark">Submit</button>
+            </div>
+          </form>
+      </div>
+
+      <div class="container my-3" >
+        <h2>My Todos</h2>
+        <table class="table" id="mytable">
+            <thead>
+              <tr>
+                <th scope="col">Sno</th>
+                <th scope="col">Todo</th>
+                <th scope="col">Description</th>
+                <th scope="col">Date created</th>
+                <th scope="col">Action</th>
+              </tr>
+            </thead>
+            <tbody id="table">
+
+
+            </tbody>
+          </table>
+      </div>
+{% endblock body %}
