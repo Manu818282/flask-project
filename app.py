@@ -30,10 +30,12 @@ def signup():
 
         cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
         query="INSERT INTO users (firstname,lastname,username,email,password,gender,mobileno ) VALUES (%s,%s,%s,%s,%s,'male',%s)"
-        cur.execute(query, (firstname, lastname, username,email,password,mobileno  ))
+        cur.execute(query, (firstname, lastname, username,email,password,mobileno))
         mysql.connection.commit()
         cur.close()
         session['username']=username
+        return redirect('/home')
+    elif session['username']!=None:
         return redirect('/home')
     else:
         return render_template('signuplogin.html')
@@ -110,14 +112,21 @@ def update(id):
     else:
         return redirect('/')
 
-@app.route('/delete/<x>')
+@app.route('/delete/<x>',methods=['DELETE','GET'])
 def delete(x):
     username = session['username']
     if username != None:
         cur=mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-        cur.execute("DELETE FROM mytodo WHERE id=(%s)", [x,])
-        mysql.connection.commit()
-        return redirect('/home')
+        total=cur.execute("SELECT title FROM mytodo WHERE id=(%s)", [x,])
+        if total>0:
+            foundobject=cur.fetchall()
+            title=foundobject[0]['title']
+            cur.execute("DELETE FROM mytodo WHERE id=(%s)", [x,])
+            mysql.connection.commit()
+            cur.close()
+            return {'code':200,'message': title+' deleted'}
+        else:
+            return {'code':404,'message':'not found'}
     else:
         return redirect('/')
 
@@ -146,7 +155,7 @@ def search():
     if username != None:
         cur = mysql.connection.cursor()
         searched=request.form['search']
-        total = cur.execute("SELECT * FROM mytodo where title=(%s)", (searched,))
+        total = cur.execute("SELECT * FROM mytodo where title LIKE (%s) AND username=(%s)", (searched+'%',username))
         if total > 0:
             todos = cur.fetchall()
             cur.close()
@@ -155,6 +164,20 @@ def search():
         return render_template('index.html', username=username)
 
     else:
+
         return redirect('/')
+@app.route('/todo',methods=['GET','POST'])
+def todo() -> list:
+    username = session['username']
+    cur = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    total = cur.execute("SELECT * FROM mytodo where username=(%s)", (username,))
+    if total > 0:
+        todos = cur.fetchall()
+        cur.close()
+        todos=list(todos)
+        print(todos)
+        return todos
+    return []
+
 
 app.run(debug=True,port=8000)

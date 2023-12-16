@@ -19,7 +19,7 @@
 
       <div class="container my-3" >
         <h2>My Todos</h2>
-        <table class="table">
+        <table class="table" id="mytable">
             <thead>
               <tr>
                 <th scope="col">Sno</th>
@@ -29,22 +29,9 @@
                 <th scope="col">Action</th>
               </tr>
             </thead>
-            <tbody>
-              {% for todo in todos  %}
-              <tr>
-                <th scope="row">{{loop.index}}</th>
-                <td>{{todo[1]}}</td>
-                <td>{{todo[2]}}</td>
-                <td>{{todo[3]}}</td>
-                <td>
-                  <a href="/update/{{todo[0]}}" methods="GET" type="button" class="btn btn-outline-dark btn-sm">Update</a>
-                  <a href="/delete/{{todo[0]}}" type="button" class="btn btn-outline-dark btn-sm">Delete</a>
-                </td>
+            <tbody id="table">
 
-              </tr>
-                
-              {% endfor %}
-              
+
             </tbody>
           </table>
       </div>
